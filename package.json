@@ -1,0 +1,18 @@
+{
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/icons-material": "^7.3.4",
+    "@mui/material": "^7.3.4",
+    "dayjs": "^1.11.19"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@vitest/ui": "^4.0.8",
+    "jest": "^30.2.0",
+    "jsdom": "^27.1.0",
+    "vitest": "^4.0.8"
+  }
+}

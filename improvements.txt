@@ -1,0 +1,6 @@
+- use better named constants in test (no caps)
+- exception and validation
+- refactoring for controller and service test for getAll? (mock projects and list of projects are repeated)
+- BEST PRACTICES (can compare also with TWU code?)
+- variable naming, e.g. for button handles
+- able to shorten any parts?

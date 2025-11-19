@@ -1,0 +1,45 @@
+POST http://localhost:8080/projects
+Content-Type: application/json
+
+{
+  "name": "Demo Project 4",
+  "description": "Test project 4",
+  "dueDate": "2030-09-01",
+  "priority": "HIGH"
+}
+
+###
+
+GET http://localhost:8080/projects/1
+
+###
+
+GET http://localhost:8080/projects
+
+###
+
+PUT http://localhost:8080/projects/2
+Content-Type: application/json
+
+{
+  "id": 2,
+  "name": "Demo Project 2",
+  "description": "Test project 2",
+  "dueDate": "2040-09-01",
+  "priority": "HIGH",
+  "status": "IN_PROGRESS"
+}
+
+###
+
+PUT http://localhost:8080/projects/8
+Content-Type: application/json
+
+{
+  "id": 1,
+  "name": "Demo Project 1",
+  "description": "Test project 1",
+  "dueDate": "2050-09-01",
+  "priority": "HIGH",
+  "status": "READY_FOR_QA"
+}
