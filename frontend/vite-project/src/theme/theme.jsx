@@ -50,14 +50,14 @@ const theme = createTheme({
             fontWeight: 500,
         },
         h4: {
-            fontSize: '1rem',  // CHANGED: 18px (much smaller)
-            fontWeight: 400,       // CHANGED: Lighter weight
+            fontSize: '1rem',
+            fontWeight: 400,
             lineHeight: 1.2,
             letterSpacing: '0.00735em',
         },
         h5: {
-            fontSize: '0.8rem',      // CHANGED: 16px (much smaller)
-            fontWeight: 400,       // CHANGED: Lighter weight
+            fontSize: '0.8rem',
+            fontWeight: 400,
             lineHeight: 1.2,
             letterSpacing: '0em',
         },

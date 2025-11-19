@@ -2,6 +2,7 @@ import {render, screen, waitFor} from "@testing-library/react";
 import axios from "axios";
 import userEvent from '@testing-library/user-event';
 import App from "../App.jsx";
+import {beforeEach, describe, expect, it, vi} from 'vitest';
 
 vi.mock('axios');
 
@@ -261,11 +262,75 @@ describe('App', () => {
     });
 
     it('should display project card containing updated details on main page when details are edited and save button is clicked  ', async () => {
+        const updatedProject = {
+            id: 1,
+            name: 'Updated Project Name',
+            description: 'Updated project description',
+            dueDate: '2045-12-31',
+            priority: 'HIGH',
+            status: 'IN_PROGRESS',
+            createdAt: '2025-11-07T08:27:36.350+00:00'
+        };
+
+        vi.mocked(axios.put).mockResolvedValueOnce({data: updatedProject});
+
+        const updatedProjects = [updatedProject, mockProjects[1]];
+        vi.mocked(axios.get).mockResolvedValueOnce({
+            data: {projects: updatedProjects}
+        });
+
         const firstProjectCard = await screen.findByText('Demo Project 1');
         await user.click(firstProjectCard);
 
         const editButton = screen.getByRole('button', {name: /edit/i});
         await user.click(editButton);
-        
+
+        await waitFor(() => {
+            expect(screen.getByText(/edit project/i)).toBeInTheDocument();
+            expect(screen.getByDisplayValue('Demo Project 1')).toBeInTheDocument();
+            expect(screen.getByDisplayValue('Test project 1')).toBeInTheDocument();
+            expect(screen.getByDisplayValue('MEDIUM')).toBeInTheDocument();
+        });
+
+        await user.clear(screen.getByLabelText(/project name/i));
+        await user.type(screen.getByLabelText(/project name/i), 'Updated Project Name');
+
+        await user.clear(screen.getByLabelText(/description/i));
+        await user.type(screen.getByLabelText(/description/i), 'Updated project description');
+
+        await user.click(screen.getByLabelText(/priority/i));
+        const highPriorityOption = await screen.findByRole('option', {name: 'HIGH'});
+        await user.click(highPriorityOption);
+
+        const saveButton = screen.getByRole('button', {name: /save/i});
+        await user.click(saveButton);
+
+        await waitFor(() => {
+            expect(axios.put).toHaveBeenCalledWith(
+                expect.stringContaining('/1'), // Should include project ID
+                expect.objectContaining({
+                    name: 'Updated Project Name',
+                    description: 'Updated project description',
+                    priority: 'HIGH'
+                }),
+                expect.any(Object)
+            );
+        });
+
+        await waitFor(() => {
+            expect(screen.queryByText(/edit project/i)).not.toBeInTheDocument();
+        });
+
+        await waitFor(() => {
+            expect(screen.getByText('Updated Project Name')).toBeInTheDocument();
+            expect(screen.getByText('HIGH')).toBeInTheDocument();
+        });
+
+        await waitFor(() => {
+            expect(screen.queryByText('Demo Project 1')).not.toBeInTheDocument();
+        });
+
+        const projectCards = await screen.findAllByTestId('project-card');
+        expect(projectCards).toHaveLength(2);
     });
 })

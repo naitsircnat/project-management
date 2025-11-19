@@ -69,18 +69,11 @@ export default function ProjectCreationModal({open, onClose}) {
             console.error('Error creating project:', error);
 
             if (error.response) {
-                // Server responded with error status
                 console.error('Server error:', error.response.data);
-                // You might want to show this to the user:
-                // setError('Failed to create project: ' + error.response.data.message);
             } else if (error.request) {
-                // Request was made but no response received
                 console.error('Network error:', error.request);
-                // setError('Network error - please check your connection');
             } else {
-                // Something else happened
                 console.error('Error:', error.message);
-                // setError('An unexpected error occurred');
             }
         }
     };

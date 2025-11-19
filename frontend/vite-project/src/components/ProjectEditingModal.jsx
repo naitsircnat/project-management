@@ -25,6 +25,7 @@ export default function ProjectEditingModal({open, onClose, project}) {
             name: project?.name || '',
             description: project?.description || '',
             priority: project?.priority,
+            status: project?.status,
             dueDate: project.dueDate ? dayjs(project.dueDate) : null
         }
     })
@@ -35,6 +36,7 @@ export default function ProjectEditingModal({open, onClose, project}) {
                 name: project.name || '',
                 description: project.description || '',
                 priority: project.priority || '',
+                status: project.status || '',
                 dueDate: project.dueDate ? dayjs(project.dueDate) : null
             });
         }
@@ -46,14 +48,10 @@ export default function ProjectEditingModal({open, onClose, project}) {
             dueDate: data.dueDate ? data.dueDate.format('YYYY-MM-DD') : null
         }
 
-        console.log('Form data:', projectData);
-
-        console.log('VITE_API_URL:', import.meta.env.VITE_API_URL);
-
         try {
 
-            const response = await axios.post(
-                `${import.meta.env.VITE_API_URL}`,
+            await axios.put(
+                `${import.meta.env.VITE_API_URL}/${project.id}`,
                 projectData,
                 {
                     headers: {
@@ -61,8 +59,6 @@ export default function ProjectEditingModal({open, onClose, project}) {
                     }
                 }
             )
-
-            console.log('Project created successfully:', response.data);
 
             onClose(true);
 
@@ -161,11 +157,7 @@ export default function ProjectEditingModal({open, onClose, project}) {
                             }
                         }}
                         render={({field, fieldState: {error}}) => {
-                            console.log('Due Date Field State:', {
-                                value: field.value,
-                                hasError: !!error,
-                                errorMessage: error?.message
-                            });
+
                             return (
                                 <DateSelector
                                     value={field.value}
@@ -199,6 +191,37 @@ export default function ProjectEditingModal({open, onClose, project}) {
                                     <MenuItem value="HIGH">HIGH</MenuItem>
                                     <MenuItem value="MEDIUM">MEDIUM</MenuItem>
                                     <MenuItem value="LOW">LOW</MenuItem>
+                                </Select>
+
+                                {error && <FormHelperText error>{error.message}</FormHelperText>}
+                            </FormControl>
+                        )}
+                    />
+
+                    <Controller
+                        name="status"
+                        control={control}
+                        rules={{required: 'Status is required'}}
+                        render={({field, fieldState: {error}}) => (
+                            <FormControl
+                                fullWidth
+                                error={!!error}
+                                margin="dense"
+                                variant="standard"
+                            >
+                                <InputLabel id="status-label">Status</InputLabel>
+                                <Select
+                                    {...field}
+                                    labelId="status-label"
+                                    id="status"
+                                    label="Priority"
+                                >
+                                    <MenuItem value="NOT_STARTED">NOT STARTED</MenuItem>
+                                    <MenuItem value="IN_PROGRESS">IN PROGRESS</MenuItem>
+                                    <MenuItem value="READY_FOR_QA">READY FOR QA</MenuItem>
+                                    <MenuItem value="READY_FOR_CLIENT_REVIEW">READY FOR CLIENT</MenuItem>
+                                    <MenuItem value="CLIENT_REVIEW">CLIENT REVIEW</MenuItem>
+                                    <MenuItem value="COMPLETED">COMPLETED</MenuItem>
                                 </Select>
 
                                 {error && <FormHelperText error>{error.message}</FormHelperText>}

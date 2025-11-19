@@ -69,8 +69,10 @@ function App() {
     const [projectEditingModalOpen, setProjectEditingModalOpen] = useState(false);
     const handleCloseProjectEditingModal = (shouldRefetch = false) => {
         setProjectEditingModalOpen(false);
+        if (shouldRefetch) {
+            fetchProjects();
+        }
     }
-
 
     return (
         <>
@@ -83,17 +85,19 @@ function App() {
                 <Box sx={{display: 'flex', flexDirection: 'row', gap: 4}}>
                     {statusColumnMap.map(columnMap => (
                         <Box key={columnMap.status}>
-                            <Box component="h2" sx={{
-                                p: 1,
-                                backgroundColor: 'primary.light',
-                                typography: 'h3',
-                                borderRadius: 2,
-                                width: 240,
-                                boxSizing: 'border-box',
-
-                            }}>
+                            <Box
+                                sx={{
+                                    p: 1,
+                                    backgroundColor: 'primary.light',
+                                    typography: 'h3',
+                                    borderRadius: 2,
+                                    width: 240,
+                                    boxSizing: 'border-box',
+                                }}
+                            >
                                 {columnMap.columnName}
                             </Box>
+
                             <Box sx={{width: '100%'}}>
                                 {
                                     filteredProjects(columnMap.status).map(
