@@ -14,12 +14,12 @@ import ProjectEditingModal from "./components/ProjectEditingModal.jsx";
 function App() {
 
     const statusColumnMap = [
-        {status: "NOT_STARTED", columnName: "Not Started"},
-        {status: "IN_PROGRESS", columnName: "In Progress"},
-        {status: "READY_FOR_QA", columnName: "Ready for QA"},
-        {status: "READY_FOR_CLIENT_REVIEW", columnName: "Ready for Client Review"},
-        {status: "CLIENT_REVIEW", columnName: "Client Review"},
-        {status: "COMPLETED", columnName: "Completed"}
+        {status: "NOT_STARTED", columnName: "NOT STARTED"},
+        {status: "IN_PROGRESS", columnName: "IN PROGRESS"},
+        {status: "READY_FOR_QA", columnName: "READY FOR QA"},
+        {status: "READY_FOR_CLIENT_REVIEW", columnName: "READY FOR CLIENT"},
+        {status: "CLIENT_REVIEW", columnName: "CLIENT REVIEW"},
+        {status: "COMPLETED", columnName: "COMPLETED"}
     ];
 
     const [projects, setProjects] = useState([]);
@@ -83,10 +83,18 @@ function App() {
                 <Box sx={{display: 'flex', flexDirection: 'row', gap: 4}}>
                     {statusColumnMap.map(columnMap => (
                         <Box key={columnMap.status}>
-                            <Box component="h2" sx={{p: 2, border: '1px solid black'}}>
+                            <Box component="h2" sx={{
+                                p: 1,
+                                backgroundColor: 'primary.light',
+                                typography: 'h3',
+                                borderRadius: 2,
+                                width: 240,
+                                boxSizing: 'border-box',
+
+                            }}>
                                 {columnMap.columnName}
                             </Box>
-                            <Box>
+                            <Box sx={{width: '100%'}}>
                                 {
                                     filteredProjects(columnMap.status).map(
                                         project => (
