@@ -26,8 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ProjectServiceTest {
@@ -168,4 +167,28 @@ public class ProjectServiceTest {
         assertThrows(ProjectNotFoundException.class, () ->
                 projectService.updateProject(1000L, TEST_NAME, TEST_DESCRIPTION, TEST_DUE_DATE, TEST_PRIORITY, TEST_STATUS));
     }
+
+    @Test
+    public void shouldDeleteProject() {
+        when(projectRepository.findById(TEST_ID)).thenReturn(Optional.of(project));
+
+        projectService.deleteProject(TEST_ID);
+
+        verify(projectRepository).findById(TEST_ID);
+        verify(projectRepository).delete(project);
+    }
+
+    @Test
+    public void deleteProject_shouldThrowExceptionWhenProjectNotFound() {
+        when(projectRepository.findById(999L)).thenReturn(Optional.empty());
+
+        assertThrows(ProjectNotFoundException.class, () ->
+                projectService.deleteProject(999L)
+        );
+
+        verify(projectRepository).findById(999L);
+        verify(projectRepository, never()).delete(any());
+    }
+
+
 }

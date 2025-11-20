@@ -57,4 +57,11 @@ public class ProjectServiceImpl implements ProjectService {
 
         return projectRepository.save(existingProject);
     }
+
+    @Override
+    public void deleteProject(long id) {
+        Project existingProject = projectRepository.findById(id)
+                .orElseThrow(() -> new ProjectNotFoundException("Project not found"));
+        projectRepository.delete(existingProject);
+    }
 }

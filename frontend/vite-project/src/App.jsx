@@ -38,7 +38,6 @@ function App() {
         fetchProjects();
     }, []);
 
-    console.log(projects);
 
     const filteredProjects = (status) => projects.filter(project => project.status === status);
 
@@ -73,6 +72,21 @@ function App() {
             fetchProjects();
         }
     }
+
+    const handleDeleteProject = async () => {
+
+        try {
+            await axios.delete(`${import.meta.env.VITE_API_URL}/${selectedProject.id}`);
+
+            setProjectDetailsModalOpen(false);
+            setSelectedProject(null);
+
+            fetchProjects();
+
+        } catch (error) {
+            console.error('Error deleting project:', error);
+        }
+    };
 
     return (
         <>
@@ -128,6 +142,7 @@ function App() {
                     close={handleCloseProjectDetailsModal}
                     edit={handleEditProjectDetailsModal}
                     project={selectedProject}
+                    onDelete={handleDeleteProject}
                 />
             }
 

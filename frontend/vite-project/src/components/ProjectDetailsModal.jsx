@@ -7,24 +7,21 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
-export default function ProjectDetailsModal({open, close, edit, project}) {
+export default function ProjectDetailsModal({open, close, edit, project, onDelete}) {
     return (
         <Dialog
             open={open}
             onClose={close}
             aria-labelledby="project-details-title"
             aria-describedby="project-details-description"
-            maxWidth="sm" // CHANGED: Sets fixed small width
-            fullWidth={true} // CHANGED: Ensures it uses the full maxWidth
+            maxWidth="sm"
+            fullWidth={true}
         >
-            {/* CHANGED: DialogTitle instead of Typography in Box */}
             <DialogTitle id="project-details-title">
                 {project.name}
             </DialogTitle>
 
-            {/* CHANGED: DialogContent for the main content area */}
             <DialogContent>
-                {/* CHANGED: Organized content with better spacing and structure */}
                 <Box sx={{display: 'flex', flexDirection: 'column', gap: 2, mt: 1}}>
                     <Typography>
                         <strong>Description</strong>
@@ -46,7 +43,7 @@ export default function ProjectDetailsModal({open, close, edit, project}) {
                         <br/>
                         {project.status}
                     </Typography>
-
+                    
                     <Typography>
                         <strong>Created</strong>
                         <br/>
@@ -55,11 +52,10 @@ export default function ProjectDetailsModal({open, close, edit, project}) {
                 </Box>
             </DialogContent>
 
-            {/* CHANGED: DialogActions for the button group */}
             <DialogActions>
                 <Button onClick={close}>Close</Button>
                 <Button onClick={edit}>Edit</Button>
-                <Button color="error">Delete</Button>
+                <Button onClick={onDelete} color="error">Delete</Button>
             </DialogActions>
         </Dialog>
     );

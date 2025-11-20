@@ -43,3 +43,7 @@ Content-Type: application/json
   "priority": "HIGH",
   "status": "READY_FOR_QA"
 }
+
+###
+
+DELETE http://localhost:8080/projects/6

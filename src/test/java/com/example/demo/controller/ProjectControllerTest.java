@@ -25,8 +25,7 @@ import static com.example.demo.controller.responsedtos.mappers.ProjectResponseBo
 import static com.example.demo.model.Priority.*;
 import static com.example.demo.model.Status.*;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -253,6 +252,29 @@ public class ProjectControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(updateProjectRequestJson))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void shouldDeleteProject() throws Exception {
+        doNothing().when(projectService).deleteProject(TEST_ID);
+
+        mockMvc.perform(delete(PROJECT_ENDPOINT))
+                .andExpect(status().isNoContent());
+
+        verify(projectService).deleteProject(TEST_ID);
+    }
+
+    @Test
+    public void shouldReturn404WhenDeletingNonExistentProject() throws Exception {
+
+        doThrow(new ProjectNotFoundException("Project not found"))
+                .when(projectService).deleteProject(999L);
+
+        mockMvc.perform(delete("/projects/999"))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Project not found"));
+
+        verify(projectService).deleteProject(999L);
     }
 }
 

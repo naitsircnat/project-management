@@ -10,7 +10,7 @@ export default function Footer() {
             <AppBar position="static">
                 <Toolbar sx={{display: 'flex', justifyContent: 'center'}}>
                     <Typography variant="h6" component="div">
-                        © BASE
+                        © 2025 Base
                     </Typography>
                 </Toolbar>
             </AppBar>

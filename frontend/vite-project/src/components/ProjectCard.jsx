@@ -38,7 +38,7 @@ export default function ProjectCard({project, onSelect}) {
                         mb: 1.5,
                         typography: 'h5',
                     }}>
-                    Due: {project.dueDate}
+                    due {project.dueDate}
                 </Typography>
             </CardContent>
         </Box>

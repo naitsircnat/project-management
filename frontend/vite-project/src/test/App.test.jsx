@@ -333,4 +333,43 @@ describe('App', () => {
         const projectCards = await screen.findAllByTestId('project-card');
         expect(projectCards).toHaveLength(2);
     });
+
+    it('should delete project when delete button is clicked in project details modal', async () => {
+        vi.mocked(axios.delete).mockResolvedValueOnce({});
+
+        const remainingProjects = [mockProjects[1]]; // Only project 2 remains
+        vi.mocked(axios.get).mockResolvedValueOnce({
+            data: {projects: remainingProjects}
+        });
+
+        const firstProjectCard = await screen.findByText('Demo Project 1');
+        await user.click(firstProjectCard);
+
+        await waitFor(() => {
+            expect(screen.getByRole('button', {name: /delete/i})).toBeInTheDocument();
+        });
+
+        const deleteButton = screen.getByRole('button', {name: /delete/i});
+        await user.click(deleteButton);
+
+        await waitFor(() => {
+            expect(axios.delete).toHaveBeenCalledWith(
+                expect.stringContaining('/projects/1')
+            )
+        });
+
+        await waitFor(() => {
+            expect(screen.queryByRole('button', {name: /close/i})).not.toBeInTheDocument();
+            expect(screen.queryByRole('button', {name: /delete/i})).not.toBeInTheDocument();
+            expect(screen.queryByText('Test project 1')).not.toBeInTheDocument();
+        });
+
+        await waitFor(() => {
+            expect(screen.queryByText('Demo Project 1')).not.toBeInTheDocument();
+            expect(screen.getByText('Demo Project 2')).toBeInTheDocument();
+        });
+
+        const projectCards = await screen.findAllByTestId('project-card');
+        expect(projectCards).toHaveLength(1);
+    });
 })
