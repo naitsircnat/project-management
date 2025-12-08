@@ -20,6 +20,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ComponentScan(basePackages = "com.example.demo")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -238,6 +239,52 @@ class DemoApplicationTests {
         assertThat(updatedProject.get().getName()).isEqualTo("New Project");
         assertThat(updatedProject.get().getDescription()).isEqualTo("Updated Project Description");
         assertThat(updatedProject.get().getStatus()).isEqualTo(Status.IN_PROGRESS);
+    }
+
+    @Test
+    public void deleteProject_ShouldRemoveProjectFromDb() {
+        CreateProjectRequestBody createProjectRequestBody = new CreateProjectRequestBody(
+                "New Project",
+                "Project Description",
+                Date.valueOf(LocalDate.now().plusDays(30)),
+                Priority.HIGH
+        );
+
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<CreateProjectRequestBody> requestEntity = new HttpEntity<>(createProjectRequestBody, headers);
+
+        restTemplate.exchange(
+                baseUrl,
+                HttpMethod.POST,
+                requestEntity,
+                ProjectResponseBody.class
+        );
+
+        UpdateProjectRequestBody updateProjectRequestBody = new UpdateProjectRequestBody(
+                1,
+                "New Project",
+                "Updated Project Description",
+                Date.valueOf(LocalDate.now().plusDays(30)),
+                Priority.HIGH,
+                Status.IN_PROGRESS
+        );
+
+        HttpEntity<UpdateProjectRequestBody> requestEntityUpdated = new HttpEntity<>(updateProjectRequestBody, headers);
+
+        restTemplate.exchange(
+                baseUrl + "/{id}",
+                HttpMethod.PUT,
+                requestEntityUpdated,
+                ProjectResponseBody.class,
+                1
+        );
+
+        int recordCount = h2Repository.findAll().size();
+        assertThat(recordCount).isEqualTo(1);
+        restTemplate.delete(baseUrl + "/{id}", 1);
+        assertEquals(0, h2Repository.findAll().size());
     }
 
 
