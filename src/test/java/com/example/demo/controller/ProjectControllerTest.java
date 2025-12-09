@@ -61,30 +61,30 @@ public class ProjectControllerTest {
     public static String ENDPOINT = "/projects";
     public static String PROJECT_ENDPOINT = ENDPOINT + "/" + TEST_ID;
 
-    public static String TEST_NAME = "testName";
-    public static String UPDATED_TEST_NAME = "updatedTestName";
+    public static String NAME = "testName";
+    public static String UPDATED_NAME = "updatedTestName";
 
-    public static String TEST_DESCRIPTION = "testDescription";
-    public static String UPDATED_TEST_DESCRIPTION = "updatedTestDescription";
+    public static String DESCRIPTION = "testDescription";
+    public static String UPDATED_DESCRIPTION = "updatedTestDescription";
 
-    public static Date TEST_DUE_DATE = Date.valueOf("2025-12-31");
-    public static String TEST_DUE_DATE_STR = TEST_DUE_DATE.toString();
+    public static Date DUE_DATE = Date.valueOf("2025-12-31");
+    public static String DUE_DATE_STR = DUE_DATE.toString();
 
     public static Priority TEST_PRIORITY = HIGH;
-    public static String TEST_PRIORITY_STR = TEST_PRIORITY.name();
+    public static String PRIORITY_STR = TEST_PRIORITY.name();
 
-    public static Status TEST_STATUS = IN_PROGRESS;
-    public static String TEST_STATUS_STR = IN_PROGRESS.name();
+    public static Status STATUS = IN_PROGRESS;
+    public static String STATUS_STR = IN_PROGRESS.name();
 
     public static Status UPDATED_TEST_STATUS = READY_FOR_QA;
-    public static String UPDATED_TEST_STATUS_STR = READY_FOR_QA.name();
+    public static String UPDATED_STATUS_STR = READY_FOR_QA.name();
 
 
-    public static Timestamp TEST_CREATED_AT = Timestamp.valueOf("2025-12-31 12:00:00");
-    public static String TEST_CREATED_AT_STR = "2025-12-31T04:00:00.000+00:00";
+    public static Timestamp CREATED_AT = Timestamp.valueOf("2025-12-31 12:00:00");
+    public static String CREATED_AT_STR = "2025-12-31T04:00:00.000+00:00";
 
-    public static final Project project = new Project(TEST_ID, TEST_NAME, TEST_DESCRIPTION, TEST_DUE_DATE, TEST_PRIORITY, TEST_STATUS, TEST_CREATED_AT);
-    public static final Project updatedProject = new Project(TEST_ID, UPDATED_TEST_NAME, UPDATED_TEST_DESCRIPTION, TEST_DUE_DATE, TEST_PRIORITY, UPDATED_TEST_STATUS, TEST_CREATED_AT);
+    public static final Project project = new Project(TEST_ID, NAME, DESCRIPTION, DUE_DATE, TEST_PRIORITY, STATUS, CREATED_AT);
+    public static final Project updatedProject = new Project(TEST_ID, UPDATED_NAME, UPDATED_DESCRIPTION, DUE_DATE, TEST_PRIORITY, UPDATED_TEST_STATUS, CREATED_AT);
 
 
     @Autowired
@@ -94,28 +94,28 @@ public class ProjectControllerTest {
     public void shouldCreateNewProject() throws Exception {
 
         when(projectService.insertProject(
-                eq(TEST_NAME),
-                eq(TEST_DESCRIPTION),
+                eq(NAME),
+                eq(DESCRIPTION),
                 any(Date.class),
                 any(Priority.class)))
                 .thenReturn(project);
 
         String createProjectRequestJson = String.format(
                 PROJECT_REQUEST_BODY,
-                TEST_NAME,
-                TEST_DESCRIPTION,
-                TEST_DUE_DATE_STR,
-                TEST_PRIORITY_STR);
+                NAME,
+                DESCRIPTION,
+                DUE_DATE_STR,
+                PRIORITY_STR);
 
         String expectedResponseBody = String.format(
                 PROJECT_RESPONSE_BODY,
                 TEST_ID,
-                TEST_NAME,
-                TEST_DESCRIPTION,
-                TEST_DUE_DATE_STR,
-                TEST_PRIORITY_STR,
-                TEST_STATUS_STR,
-                TEST_CREATED_AT_STR);
+                NAME,
+                DESCRIPTION,
+                DUE_DATE_STR,
+                PRIORITY_STR,
+                STATUS_STR,
+                CREATED_AT_STR);
 
         mockMvc.perform(post(ENDPOINT)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -124,8 +124,8 @@ public class ProjectControllerTest {
                 .andExpect(content().json(expectedResponseBody));
 
         verify(projectService).insertProject(
-                eq(TEST_NAME),
-                eq(TEST_DESCRIPTION),
+                eq(NAME),
+                eq(DESCRIPTION),
                 any(Date.class),
                 any(Priority.class));
     }
@@ -138,11 +138,11 @@ public class ProjectControllerTest {
         String expectedResponseBody = String.format(
                 PROJECT_RESPONSE_BODY,
                 TEST_ID,
-                TEST_NAME,
-                TEST_DESCRIPTION,
-                TEST_DUE_DATE_STR,
-                TEST_PRIORITY_STR,
-                TEST_CREATED_AT_STR);
+                NAME,
+                DESCRIPTION,
+                DUE_DATE_STR,
+                PRIORITY_STR,
+                CREATED_AT_STR);
 
         mockMvc.perform(get(ENDPOINT + "/" + TEST_ID))
                 .andExpect(status().isOk())
@@ -194,8 +194,8 @@ public class ProjectControllerTest {
 
         when(projectService.updateProject(
                 eq(TEST_ID),
-                eq(UPDATED_TEST_NAME),
-                eq(UPDATED_TEST_DESCRIPTION),
+                eq(UPDATED_NAME),
+                eq(UPDATED_DESCRIPTION),
                 any(Date.class),
                 any(Priority.class),
                 any(Status.class)
@@ -204,21 +204,21 @@ public class ProjectControllerTest {
 
         String updateProjectRequestJson = String.format(
                 PROJECT_REQUEST_BODY,
-                UPDATED_TEST_NAME,
-                UPDATED_TEST_DESCRIPTION,
-                TEST_DUE_DATE_STR,
-                TEST_PRIORITY_STR,
-                UPDATED_TEST_STATUS_STR);
+                UPDATED_NAME,
+                UPDATED_DESCRIPTION,
+                DUE_DATE_STR,
+                PRIORITY_STR,
+                UPDATED_STATUS_STR);
 
         String expectedResponseBody = String.format(
                 PROJECT_RESPONSE_BODY,
                 TEST_ID,
-                UPDATED_TEST_NAME,
-                UPDATED_TEST_DESCRIPTION,
-                TEST_DUE_DATE_STR,
-                TEST_PRIORITY_STR,
-                UPDATED_TEST_STATUS_STR,
-                TEST_CREATED_AT_STR);
+                UPDATED_NAME,
+                UPDATED_DESCRIPTION,
+                DUE_DATE_STR,
+                PRIORITY_STR,
+                UPDATED_STATUS_STR,
+                CREATED_AT_STR);
 
         mockMvc.perform(put(PROJECT_ENDPOINT)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -228,8 +228,8 @@ public class ProjectControllerTest {
 
         verify(projectService).updateProject(
                 eq(TEST_ID),
-                eq(UPDATED_TEST_NAME),
-                eq(UPDATED_TEST_DESCRIPTION),
+                eq(UPDATED_NAME),
+                eq(UPDATED_DESCRIPTION),
                 any(Date.class),
                 any(Priority.class),
                 any(Status.class));
@@ -242,11 +242,11 @@ public class ProjectControllerTest {
 
         String updateProjectRequestJson = String.format(
                 PROJECT_REQUEST_BODY,
-                UPDATED_TEST_NAME,
-                UPDATED_TEST_DESCRIPTION,
-                TEST_DUE_DATE_STR,
-                TEST_PRIORITY_STR,
-                UPDATED_TEST_STATUS_STR);
+                UPDATED_NAME,
+                UPDATED_DESCRIPTION,
+                DUE_DATE_STR,
+                PRIORITY_STR,
+                UPDATED_STATUS_STR);
 
         mockMvc.perform(put("/projects/1000")
                         .contentType(MediaType.APPLICATION_JSON)

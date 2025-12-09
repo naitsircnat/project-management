@@ -37,26 +37,26 @@ public class ProjectServiceTest {
     @InjectMocks
     private ProjectServiceImpl projectService;
 
-    public static long TEST_ID = 1;
+    public static long ID = 1;
 
-    public static String TEST_NAME = "testName";
-    public static String UPDATED_TEST_NAME = "updatedTestName";
+    public static String NAME = "testName";
+    public static String UPDATED_NAME = "updatedTestName";
 
     public static String TEST_DESCRIPTION = "testDescription";
-    public static String UPDATED_TEST_DESCRIPTION = "updatedTestDescription";
+    public static String UPDATED_DESCRIPTION = "updatedTestDescription";
 
-    public static Date TEST_DUE_DATE = Date.valueOf("2025-12-31");
+    public static Date DUE_DATE = Date.valueOf("2025-12-31");
 
-    public static Priority TEST_PRIORITY = Priority.HIGH;
+    public static Priority PRIORITY = Priority.HIGH;
 
-    public static Status TEST_STATUS = IN_PROGRESS;
+    public static Status STATUS = IN_PROGRESS;
 
-    public static Status UPDATED_TEST_STATUS = READY_FOR_QA;
+    public static Status UPDATED_STATUS = READY_FOR_QA;
 
-    public static Timestamp TEST_CREATED_AT = Timestamp.valueOf("2025-12-31 12:00:00");
+    public static Timestamp CREATED_AT = Timestamp.valueOf("2025-12-31 12:00:00");
 
-    public static final Project project = new Project(TEST_ID, TEST_NAME, TEST_DESCRIPTION, TEST_DUE_DATE, TEST_PRIORITY, TEST_STATUS, TEST_CREATED_AT);
-    public static final Project updatedProject = new Project(TEST_ID, UPDATED_TEST_NAME, UPDATED_TEST_DESCRIPTION, TEST_DUE_DATE, TEST_PRIORITY, UPDATED_TEST_STATUS, TEST_CREATED_AT);
+    public static final Project project = new Project(ID, NAME, TEST_DESCRIPTION, DUE_DATE, PRIORITY, STATUS, CREATED_AT);
+    public static final Project updatedProject = new Project(ID, UPDATED_NAME, UPDATED_DESCRIPTION, DUE_DATE, PRIORITY, UPDATED_STATUS, CREATED_AT);
 
     @Test
     public void shouldInsertProject() {
@@ -64,10 +64,10 @@ public class ProjectServiceTest {
         when(projectRepository.save(any(Project.class))).thenReturn(project);
 
         Project projectToBeInserted = projectService.insertProject(
-                TEST_NAME,
+                NAME,
                 TEST_DESCRIPTION,
-                TEST_DUE_DATE,
-                TEST_PRIORITY
+                DUE_DATE,
+                PRIORITY
         );
 
         ArgumentCaptor<Project> captor = ArgumentCaptor.forClass(Project.class);
@@ -75,10 +75,10 @@ public class ProjectServiceTest {
 
         Project capturedProject = captor.getValue();
 
-        assertEquals(capturedProject.getName(), TEST_NAME);
+        assertEquals(capturedProject.getName(), NAME);
         assertEquals(capturedProject.getDescription(), TEST_DESCRIPTION);
-        assertEquals(capturedProject.getDueDate(), TEST_DUE_DATE);
-        assertEquals(capturedProject.getPriority(), TEST_PRIORITY);
+        assertEquals(capturedProject.getDueDate(), DUE_DATE);
+        assertEquals(capturedProject.getPriority(), PRIORITY);
 
         assertEquals(project, projectToBeInserted);
     }
@@ -88,9 +88,9 @@ public class ProjectServiceTest {
 
         when(projectRepository.findById(anyLong())).thenReturn(Optional.of(project));
 
-        Optional<Project> retrievedProject = projectService.getProjectById(TEST_ID);
+        Optional<Project> retrievedProject = projectService.getProjectById(ID);
 
-        verify(projectRepository).findById(TEST_ID);
+        verify(projectRepository).findById(ID);
 
         assertEquals(retrievedProject.get(), project);
     }
@@ -130,20 +130,20 @@ public class ProjectServiceTest {
     @Test
     public void shouldUpdateProject() {
 
-        when(projectRepository.findById(TEST_ID)).thenReturn(Optional.of(project));
+        when(projectRepository.findById(ID)).thenReturn(Optional.of(project));
 
         when(projectRepository.save(any(Project.class))).thenReturn(updatedProject);
 
         Project result = projectService.updateProject(
-                TEST_ID,
-                UPDATED_TEST_NAME,
-                UPDATED_TEST_DESCRIPTION,
-                TEST_DUE_DATE,
-                TEST_PRIORITY,
-                UPDATED_TEST_STATUS
+                ID,
+                UPDATED_NAME,
+                UPDATED_DESCRIPTION,
+                DUE_DATE,
+                PRIORITY,
+                UPDATED_STATUS
         );
 
-        verify(projectRepository).findById(TEST_ID);
+        verify(projectRepository).findById(ID);
 
         ArgumentCaptor<Project> captor = ArgumentCaptor.forClass(Project.class);
 
@@ -151,11 +151,11 @@ public class ProjectServiceTest {
 
         Project capturedProject = captor.getValue();
 
-        assertEquals(capturedProject.getName(), UPDATED_TEST_NAME);
-        assertEquals(capturedProject.getDescription(), UPDATED_TEST_DESCRIPTION);
-        assertEquals(capturedProject.getDueDate(), TEST_DUE_DATE);
-        assertEquals(capturedProject.getPriority(), TEST_PRIORITY);
-        assertEquals(capturedProject.getStatus(), UPDATED_TEST_STATUS);
+        assertEquals(capturedProject.getName(), UPDATED_NAME);
+        assertEquals(capturedProject.getDescription(), UPDATED_DESCRIPTION);
+        assertEquals(capturedProject.getDueDate(), DUE_DATE);
+        assertEquals(capturedProject.getPriority(), PRIORITY);
+        assertEquals(capturedProject.getStatus(), UPDATED_STATUS);
 
         assertEquals(result, updatedProject);
     }
@@ -165,16 +165,16 @@ public class ProjectServiceTest {
         when(projectRepository.findById(1000L)).thenReturn(Optional.empty());
 
         assertThrows(ProjectNotFoundException.class, () ->
-                projectService.updateProject(1000L, TEST_NAME, TEST_DESCRIPTION, TEST_DUE_DATE, TEST_PRIORITY, TEST_STATUS));
+                projectService.updateProject(1000L, NAME, TEST_DESCRIPTION, DUE_DATE, PRIORITY, STATUS));
     }
 
     @Test
     public void shouldDeleteProject() {
-        when(projectRepository.findById(TEST_ID)).thenReturn(Optional.of(project));
+        when(projectRepository.findById(ID)).thenReturn(Optional.of(project));
 
-        projectService.deleteProject(TEST_ID);
+        projectService.deleteProject(ID);
 
-        verify(projectRepository).findById(TEST_ID);
+        verify(projectRepository).findById(ID);
         verify(projectRepository).delete(project);
     }
 
@@ -189,6 +189,4 @@ public class ProjectServiceTest {
         verify(projectRepository).findById(999L);
         verify(projectRepository, never()).delete(any());
     }
-
-
 }

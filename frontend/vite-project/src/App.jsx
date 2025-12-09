@@ -141,7 +141,7 @@ function App() {
                     open={projectDetailsModalOpen}
                     close={handleCloseProjectDetailsModal}
                     edit={handleEditProjectDetailsModal}
-                    project={selectedProject}
+                    project={selectedProject}≠
                     onDelete={handleDeleteProject}
                 />
             }
