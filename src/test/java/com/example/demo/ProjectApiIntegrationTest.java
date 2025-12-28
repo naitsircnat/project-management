@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ComponentScan(basePackages = "com.example.demo")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class DemoApplicationTests {
+class ProjectApiIntegrationTest {
 
     @LocalServerPort
     private int port;
